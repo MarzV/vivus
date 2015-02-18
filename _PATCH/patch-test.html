@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Vivus Test</title>
+<link href="css/style.css" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css">
+<script src="https://code.jquery.com/jquery-2.1.3.min.js" type="text/javascript"></script>
+<script src="js/vivus-patched.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+window.$doc=$(document);
+
+</script>
+</head>
+<body>
+
+<h1>Vivus patch – test page</h1>
+<p>This is a test page for an embedded svg image with javascript inside.</p>
+<section>
+<h2>Original vivus</h2>
+<article>
+See the original examples: <a href="http://maxwellito.github.io/vivus/" target="_blank">http://maxwellito.github.io/vivus/</a>
+<article>
+</section>
+
+<p>
+All svg elements are placed as <code>&lt;object&gt;</code> as an external file.<br>
+The svg file must be at the same domain, see <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy" target="_blank">Same-origin policy</a>.
+</p>
+
+<div class="container">
+	<div>
+		<h3>#svg_A<br>Placed svg</h3>
+		<object id="svg_A" type="image/svg+xml" data="svg/lens.svg" >Your browser does not support SVG</object>
+	</div>
+	<div>
+		<h3>#svg_B<br>Placed svg with animation (inside svg)</h3>
+		<object id="svg_B" type="image/svg+xml" data="svg/lens-with-animation.svg" >Your browser does not support SVG</object>
+	</div>
+	<div>
+		<h3>#svg_C<br>Placed svg with js (inside svg)</h3>
+		<object id="svg_C" class="left" type="image/svg+xml" data="svg/lens-with-js.svg" >Your browser does not support SVG</object>
+		<script type="text/javascript">
+		var svgDoc = null;
+		(document.getElementById('svg_C')).addEventListener('load', function(e){
+			svgDoc = e.target.contentDocument;
+		}, false);
+		var setColor = function(){
+			var $svg = $( svgDoc._SVG.getElement() );
+			var $group = $svg.find('g').eq(0);
+			var $children = $group.children();
+			var hex = '#'+Math.floor(Math.random()*16777215).toString(16);
+			$('#colorValue').html(hex);
+			$children.each(function(i,elm){
+				$(this).attr({stroke:hex});
+			});
+		}
+		var svgAlert = function(){
+			svgDoc._SVG.alertFromSVG('this is a message from the html file.'+"\n"+'Current color: '+$('#colorValue').text());
+		};
+		</script>
+		<div class="left">
+			<div id="colorValue">none</div>
+			<button onclick="setColor()">Set random color<br>[from outside]</button>
+			<button onclick="svgAlert()">alert from svg file</button>
+		</div>
+	</div>
+
+</div>
+
+<hr>
+
+<div class="container">
+	<div>
+		<h3>#svg_D<br>svg with external js inside svg</h3>
+		<object id="svg_D" type="image/svg+xml" data="svg/lens-with-external-js.svg" >Your browser does not support SVG</object>
+	</div>
+	<div>
+		<h3>#svg_E<br>svg with external vivus.js inside svg<br>(controlled from this html file)</h3>
+		<object id="svg_E" class="left" type="image/svg+xml" data="svg/lens-with-external-vivus.svg" >Your browser does not support SVG</object>
+		<script type="text/javascript">
+		var svgDocE = null;
+		var $btn_rewind2 = null;
+		$(function(){
+			$btn_rewind2 = $(btn_rewind2);
+			$btn_rewind2.on('click',function(e){
+				$btn_rewind2.attr({disabled:true});
+				svgDocE.Vivus.setType('oneByOne').play(-2);
+			});
+		});
+		var svgDocE_callback = function(_vivus){
+			console.log('svgDocE_callback() called.');
+			$btn_rewind2.attr({disabled:false});
+		};
+		(document.getElementById('svg_E')).addEventListener('load', function(e){
+			svgDocE = e.target.contentDocument;
+			svgDocE.Vivus.setCallback( svgDocE_callback );
+		}, false);
+		</script>
+		<div class="left">
+			<button onclick="svgDocE.Vivus.setType('delayed').play();">play</button>
+			<button onclick="svgDocE.Vivus.stop();">stop</button>
+			<button onclick="svgDocE.Vivus.reset().play(1);">replay</button>
+			<button onclick="svgDocE.Vivus.play(-3);">rewind</button>
+<!-- TODO
+			<button onclick="svgDocE.Vivus.setType('oneByOne').play(1);">replay oneByOne</button>
+-->
+			<button id="btn_rewind2" disabled="disabled" onclick="">rewind oneByOne</button>
+		</div>
+	</div>
+</div>
+
+<hr>
+
+
+<div class="container">
+<p>
+These are examples where a svg is placed as <code>&lt;object&gt;</code> and how this svg is controlled with Javascript.
+<br><br>
+svg_E is an example where vivus.js is loaded from the svg file but controlled from this html.
+<hr>
+In my opinion, the logic or animation of a specific svg graphic should be packed with the svg file.
+</p>
+<p>
+Please have a look at the source to see how it's made.
+<br><br>
+HTH
+</p>
+</div>
+
+
+</body>
+</html>
