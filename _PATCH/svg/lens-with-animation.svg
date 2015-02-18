@@ -14,8 +14,6 @@
 	<line fill="none" stroke="#f9f9f9" stroke-width="3" stroke-miterlimit="10" x1="168.693" y1="124.584" x2="107.59" y2="139.012"/>
 	<line fill="none" stroke="#f9f9f9" stroke-width="3" stroke-miterlimit="10" x1="131.19" y1="165.957" x2="77.781" y2="132.953"/>
 	<line fill="none" stroke="#f9f9f9" stroke-width="3" stroke-miterlimit="10" x1="75.417" y1="168.693" x2="60.987" y2="107.59"/>
-<!--
 	<animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" begin="0s" dur="10s" repeatCount="indefinite"/>
--->
 </g>
 </svg>
