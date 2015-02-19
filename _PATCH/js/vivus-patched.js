@@ -381,6 +381,17 @@ Vivus.prototype.setType = function (type) {
   this.mapping();
   return this;
 };
+Vivus.prototype.setStrokeColor = function(hexColorAsString){
+	if ( 0 === this.map.length || typeof hexColorAsString === 'undefined') {
+		return this;
+	}
+	for ( var i=0; i < this.map.length; i++ ){
+		if ( this.map[i].el ) {
+			this.map[i].el.setAttribute( 'stroke', hexColorAsString );
+		}
+	}
+	return this;
+};
 Vivus.prototype.setOptions = function (options) {
   var allowedTypes = ['delayed', 'async', 'oneByOne', 'scenario', 'scenario-sync'];
   var allowedStarts =  ['inViewport', 'manual', 'autostart'];
