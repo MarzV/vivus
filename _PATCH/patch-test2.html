@@ -59,6 +59,9 @@ See the original examples: <a href="http://maxwellito.github.io/vivus/" target="
 					<path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M157.3,300.8c3.8-2.3-29,0.8-35.6,3.2"/>
 			</svg>
 			<button onclick="playSVGinline()">PLAY inline SVG</button>
+			<button onclick="inlineSVG.reset().play()">Replay</button>
+			<button onclick="inlineSVG.setType('oneByOne').play(-3)">Rewind with "oneByOne"</button>
+
 			<script type="text/javascript">
 				var inlineSVG = null;
 				var myCallback=function(vivus){
@@ -66,7 +69,7 @@ See the original examples: <a href="http://maxwellito.github.io/vivus/" target="
 				};
 				var playSVGinline=function(){
 console.log('playSVGinline');
-					inlineSVG.play();
+					inlineSVG.setType('delayed').play();
 				};
 				inlineSVG = new Vivus('hi-there', {type: 'delayed', start:'manual', duration: 200}, myCallback);
 			</script>
@@ -77,7 +80,8 @@ console.log('playSVGinline');
 		<p style="border:1px solid #fff;height:100%;">
 			<object id="svg_B" type="image/svg+xml" data="svg/hi-there.svg" >Your browser does not support SVG</object>
 			<button onclick="playSVGextern()">PLAY object SVG</button>
-
+			<button onclick="externSVG.reset().play()">Replay</button>
+			<button onclick="externSVG.setType('oneByOne').play(-3)">Rewind with "oneByOne"</button>
 			<script type="text/javascript">
 				var externSVG = null;
 				var myCallback2=function(vivus){
@@ -85,7 +89,7 @@ console.log('playSVGinline');
 				};
 				var playSVGextern=function(){
 console.log('playSVGextern');
-					externSVG.play();
+					externSVG.setType('delayed').play();
 				};
 				externSVG = new Vivus('svg_B', {type: 'delayed', start:'manual', duration: 200}, myCallback2 );
 			</script>
