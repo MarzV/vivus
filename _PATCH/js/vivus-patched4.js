@@ -328,7 +328,7 @@ function Vivus (element, options, callback) {
         self.frameLength = 0;
         self.currentFrame = 0;
         self.map = [];
-        new Pathformer(element);
+        self._PathformerInstance = new Pathformer(element);
         self.mapping();
         self.starter();
         isReady = true;
@@ -371,11 +371,11 @@ function Vivus (element, options, callback) {
                 }
         }
     }
-}
+};
 
 Vivus.prototype.isReady = function(){
-    return isReady;
-}
+};
+Vivus.prototype._PathformerInstance = null;
 
 /**
  * Setters
