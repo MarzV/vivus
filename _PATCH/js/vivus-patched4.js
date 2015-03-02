@@ -374,6 +374,7 @@ function Vivus (element, options, callback) {
 };
 
 Vivus.prototype.isReady = function(){
+	return isReady;
 };
 Vivus.prototype._PathformerInstance = null;
 
