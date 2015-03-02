@@ -27,7 +27,7 @@ See the original examples: <a href="http://maxwellito.github.io/vivus/" target="
 
 <div class="container">
 	<div>
-		<h3>1.<br>Placed svg inside this html</h3>
+		<h3>A.<br>Placed svg inside this html</h3>
 		<p style="border:1px solid #fff;">
 			<svg height="300" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
 					 viewBox="0 0 404.7 354" enable-background="new 0 0 404.7 354" id="hi-there" onclick="hi.reset().play();">
@@ -76,7 +76,7 @@ console.log('playSVGinline');
 		</p>
 	</div>
 	<div>
-		<h3>2.<br>Placed svg as object as external source</h3>
+		<h3>B.<br>Placed svg as object as external source</h3>
 		<p style="border:1px solid #fff;height:100%;">
 			<object id="svg_B" type="image/svg+xml" data="svg/hi-there.svg" >Your browser does not support SVG</object>
 			<button onclick="playSVGextern()">PLAY object SVG</button>
@@ -97,7 +97,7 @@ console.log('playSVGextern');
 	</div>
 	<hr>
 	<div>
-		<h3>3.<br>Placed svg as object with JS</h3>
+		<h3>C.<br>Placed svg as object with JS</h3>
 		<p style="border:1px solid #fff;">
 
 			<span id="showMySVGInsideThisElement"></span>
@@ -132,15 +132,15 @@ console.log('****myCallbackOnReady on created <object>****');
 		</p>
 	</div>
 	<div>
-		<h3>4.<br>Placed svg as object with self created DOM node in JS</h3>
+		<h3>D.<br>Placed svg as object with self created DOM node in JS</h3>
 		<p style="border:1px solid #fff;">
 
 			<span id="showMySVGInsideThisElement2"></span>
 
 			<span>
-				<button onclick="externSVGviaJS.setType('delayed').play();">PLAY object SVG</button>
-				<button onclick="externSVGviaJS.reset().play()">Replay</button>
-				<button onclick="externSVGviaJS.setType('oneByOne').play(-3)">Rewind with "oneByOne"</button>
+				<button onclick="externSVGviaJS2.setType('delayed').play();">PLAY object SVG</button>
+				<button onclick="externSVGviaJS2.reset().play()">Replay</button>
+				<button onclick="externSVGviaJS2.setType('oneByOne').play(-3)">Rewind with "oneByOne"</button>
 				<script type="text/javascript">
 					var externSVGviaJS2 = null;
 					var myCallback4=function(vivus){
@@ -154,16 +154,16 @@ console.log('****myCallbackOnReady2 on created <object>****');
 					var appendMyElementToThisElm = document.getElementById('showMySVGInsideThisElement2');
 					appendMyElementToThisElm.appendChild( myElement );
 /* myElement is a created DOM element */
-					externSVGviaJS = new Vivus(
+					externSVGviaJS2 = new Vivus(
 						myElement
 						,{
 							 type	:'delayed'
 							,start	:'manual'
 							,duration: 200
 							,file	:'svg/hi-there.svg'
-							,onReady: myCallbackOnReady
+							,onReady: myCallbackOnReady2
 						}
-						,myCallback3
+						,myCallback4
 					);
 				</script>
 			</span>
