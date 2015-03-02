@@ -317,8 +317,6 @@ function Vivus (element, options, callback) {
     var self = this;
     this.setElement(element);
     var _init = function(){
-console.log('INIT CALLED: ');
-console.log(options);
         // Setup
         self.setOptions(options);
         self.setCallback(callback);
