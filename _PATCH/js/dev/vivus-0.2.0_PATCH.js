@@ -294,28 +294,14 @@ function Vivus (element, options, callback) {
 
   // Setup
   this.isReady = false;
-  // _init must be called as a callback function because:
-  // if Vivus needs to create an <object> the initialization 
-  // has to be done after the content has been loaded
-  var self = this;
-  this.options = options;
-  var _init = function(){
-	self.setOptions(options);
-	self.setCallback(callback);
-	if (self.isReady) {
-		self.init();
-	}
-  };
-  // in case of an <object> setElement returns false
-  // in case of any other element it returns true so the _init has to be called
-  if ( ! this.setElement(element, _init) ){
-  	_init();
-  }
-  
+  this.setElement(element);
+  this.setOptions(options);
+  this.setCallback(callback);
 
+  if (this.isReady) {
+    this.init();
+  }
 }
-// is needed as Vivus.prototype.setOptions requires options.file
-Vivus.prototype.options = null;
 
 /**
  * Timing functions
@@ -344,47 +330,23 @@ Vivus.EASE_IN  = function (x) {return Math.pow(x, 3);};
  *
  * @param {DOM|String}   element  SVG Dom element or id of it
  */
-Vivus.prototype.setElement = function (element, _callback) {
-// returns true if addEventListener is called (in case of <object>)
-// returns false in case of any other element
-	var _return = false;
+Vivus.prototype.setElement = function (element) {
   // Basic check
   if (typeof element === 'undefined') {
     throw new Error('Vivus [constructor]: "element" parameter is required');
   }
 
-	var self = this;
-	var addLoadListener = function( _cb ){ // _cb = callback
-		// If we have to wait for it
-		element.addEventListener('load', function (evt) {
-			//self.el = evt.target.contentDocument.querySelector('svg');
-			var target = evt.target.contentDocument;
-			var svgElements = target.getElementsByTagName('svg');
-			if ( 0 === svgElements.length ) {
-				throw new Error('Vivus [constructor]: object loaded does not contain any SVG');
-			}
-			else {
-				self.el = svgElements[0];
-				self.isReady = true;
-				_cb();
-			}
-		});
-	};
-
   // Set the element
   if (element.constructor === String) {
     element = document.getElementById(element);
-/*
     if (!element) {
       throw new Error('Vivus [constructor]: "element" parameter is not related to an existing ID');
     }
-*/
   }
 
   switch (element.constructor) {
   case SVGSVGElement:
   case SVGElement:
-  
     this.el = element;
     this.isReady = true;
     break;
@@ -394,44 +356,26 @@ Vivus.prototype.setElement = function (element, _callback) {
     this.el = element.contentDocument.querySelector('svg');
     if (this.el) {
       this.isReady = true;
+      return;
     }
-	else {
-		_return = true;
-		addLoadListener(_callback);
-	}
-    break;
-  default:
-	if ( typeof this.options.file !== 'undefined' ){
-		var objElm = document.createElement('object');
-		objElm.setAttribute('type', 'image/svg+xml');
-		objElm.setAttribute('data', this.options.file);
-		element.appendChild(objElm);
-		element = objElm;
-		_return = true;
-		addLoadListener(_callback);
-	}
-	else {
-		throw new Error('Vivus [constructor]: To add an <object> on this element at least options.file must be defined!');
-	}
-  }
-  return _return;
-};
 
-Vivus.prototype.getTypes = function() {
-	return ['delayed', 'async', 'oneByOne', 'scenario', 'scenario-sync'];
-};
-Vivus.prototype.setType = function (type) {
-  var allowedTypes = this.getTypes();
-  // Set the animation type
-  if (type && allowedTypes.indexOf(type) === -1) {
-    throw new Error('Vivus [constructor]: ' + type + ' is not an existing animation `type`');
+    // If we have to wait for it
+    var self = this;
+    element.addEventListener('load', function () {
+      self.el = element.contentDocument.querySelector('svg');
+      if (!self.el) {
+        throw new Error('Vivus [constructor]: object loaded does not contain any SVG');
+      }
+      else {
+        self.isReady = true;
+        self.init();
+      }
+    });
+    break;
+
+  default:
+    throw new Error('Vivus [constructor]: "element" parameter must be a string or a SVGelement');
   }
-  else {
-    this.type = type || allowedTypes[0];
-  }
-  this.map=[];
-  this.mapping();
-  return this;
 };
 
 /**
@@ -442,7 +386,7 @@ Vivus.prototype.setType = function (type) {
  * @param  {object} options Object from the constructor
  */
 Vivus.prototype.setOptions = function (options) {
-  var allowedTypes = this.getTypes();
+  var allowedTypes = ['delayed', 'async', 'oneByOne', 'scenario', 'scenario-sync'];
   var allowedStarts =  ['inViewport', 'manual', 'autostart'];
 
   // Basic check
